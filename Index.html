@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Progress Report – Beneton Sugar Refinery</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #2c3e50; font-size: 13px; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%); color: white; padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+  .header .sub { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  .header .date-badge { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 18px; text-align: center; }
+  .header .date-badge .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+  .header .date-badge .value { font-size: 15px; font-weight: 700; margin-top: 2px; }
+
+  /* SUMMARY CARDS */
+  .summary { display: flex; gap: 16px; padding: 20px 36px; flex-wrap: wrap; }
+  .card { background: white; border-radius: 10px; padding: 18px 22px; flex: 1; min-width: 140px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-top: 4px solid #2d6a9f; }
+  .card.green { border-top-color: #27ae60; }
+  .card.orange { border-top-color: #e67e22; }
+  .card.red { border-top-color: #e74c3c; }
+  .card.blue { border-top-color: #2980b9; }
+  .card .num { font-size: 30px; font-weight: 700; line-height: 1; }
+  .card .lbl { font-size: 11px; color: #7f8c8d; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* OVERALL PROGRESS BAR */
+  .overall-bar-section { background: white; margin: 0 36px 20px; border-radius: 10px; padding: 18px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .overall-bar-section h3 { font-size: 13px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  .bar-label { width: 160px; font-size: 12px; font-weight: 600; color: #2c3e50; }
+  .bar-track { flex: 1; background: #ecf0f1; border-radius: 6px; height: 18px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; transition: width 0.3s; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: white; }
+  .bar-pct { width: 40px; font-size: 12px; font-weight: 700; text-align: right; }
+
+  /* SECTION TABLES */
+  .section { margin: 0 36px 24px; }
+  .section-title { background: #1a3a5c; color: white; padding: 10px 18px; border-radius: 8px 8px 0 0; font-size: 13px; font-weight: 700; letter-spacing: 0.3px; display: flex; justify-content: space-between; align-items: center; }
+  .section-title .pct-badge { background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-radius: 0 0 8px 8px; overflow: hidden; }
+  th { background: #eaf0f8; color: #1a3a5c; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 12px; text-align: left; font-weight: 700; }
+  td { padding: 9px 12px; border-bottom: 1px solid #f0f3f7; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fbff; }
+
+  /* STATUS BADGES */
+  .status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status.complete { background: #d5f5e3; color: #1e8449; }
+  .status.progress { background: #fef9e7; color: #b7770d; }
+  .status.not-started { background: #fdecea; color: #c0392b; }
+
+  /* INLINE PROGRESS BAR */
+  .mini-bar-track { background: #ecf0f1; border-radius: 4px; height: 8px; width: 80px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+  .mini-bar-fill { height: 100%; border-radius: 4px; }
+
+  /* CATEGORY TAG */
+  .cat-tag { display: inline-block; background: #eaf0f8; color: #2d6a9f; border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 600; }
+
+  /* REMARKS */
+  .remark { font-size: 11px; color: #7f8c8d; font-style: italic; max-width: 260px; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; color: #95a5a6; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="sub">SCHAFFER SUGAR SERVICES</div>
+    <h1>Engineering Progress Report</h1>
+    <div class="sub">Beneton Sugar Refinery Project</div>
+  </div>
+  <div class="date-badge">
+    <div class="label">Report Date</div>
+    <div class="value">April 07, 2026</div>
+  </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="summary">
+  <div class="card green">
+    <div class="num">13</div>
+    <div class="lbl">Completed (100%)</div>
+  </div>
+  <div class="card orange">
+    <div class="num">15</div>
+    <div class="lbl">In Progress</div>
+  </div>
+  <div class="card red">
+    <div class="num">14</div>
+    <div class="lbl">Not Started</div>
+  </div>
+  <div class="card blue">
+    <div class="num">42</div>
+    <div class="lbl">Total Line Items</div>
+  </div>
+  <div class="card" style="border-top-color:#8e44ad;">
+    <div class="num">56%</div>
+    <div class="lbl">Overall Progress</div>
+  </div>
+</div>
+
+<!-- OVERALL PROGRESS BY CATEGORY -->
+<div class="overall-bar-section">
+  <h3>Progress by Discipline</h3>
+
+  <div class="bar-row">
+    <div class="bar-label">Civil</div>
+    <div class="bar-track"><div class="bar-fill" style="width:0%;background:#e74c3c;">0%</div></div>
+    <div class="bar-pct">0%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Control</div>
+    <div class="bar-track"><div class="bar-fill" style="width:0%;background:#e74c3c;">0%</div></div>
+    <div class="bar-pct">0%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Electrical</div>
+    <div class="bar-track"><div class="bar-fill" style="width:60%;background:#f39c12;">60%</div></div>
+    <div class="bar-pct">60%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Electrical/Control</div>
+    <div class="bar-track"><div class="bar-fill" style="width:0%;background:#e74c3c;">0%</div></div>
+    <div class="bar-pct">0%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Equipment Specification</div>
+    <div class="bar-track"><div class="bar-fill" style="width:65%;background:#f39c12;">65%</div></div>
+    <div class="bar-pct">65%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Instrumentation</div>
+    <div class="bar-track"><div class="bar-fill" style="width:80%;background:#f39c12;">80%</div></div>
+    <div class="bar-pct">80%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Layout</div>
+    <div class="bar-track"><div class="bar-fill" style="width:55%;background:#f39c12;">55%</div></div>
+    <div class="bar-pct">55%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">M&E</div>
+    <div class="bar-track"><div class="bar-fill" style="width:85%;background:#f39c12;">85%</div></div>
+    <div class="bar-pct">85%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">P&ID</div>
+    <div class="bar-track"><div class="bar-fill" style="width:74%;background:#f39c12;">74%</div></div>
+    <div class="bar-pct">74%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Piping</div>
+    <div class="bar-track"><div class="bar-fill" style="width:16%;background:#e67e22;">16%</div></div>
+    <div class="bar-pct">16%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Process Engineering</div>
+    <div class="bar-track"><div class="bar-fill" style="width:100%;background:#27ae60;">100%</div></div>
+    <div class="bar-pct">100%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Project</div>
+    <div class="bar-track"><div class="bar-fill" style="width:100%;background:#27ae60;">100%</div></div>
+    <div class="bar-pct">100%</div>
+  </div>
+</div>
+
+<!-- SECTION A: BASIC ENGINEERING -->
+<div class="section">
+  <div class="section-title">
+    A — Basic Engineering Activities
+    <span class="pct-badge">Avg. Progress: 95%</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:60px;">Item</th>
+        <th style="width:100px;">Category</th>
+        <th style="width:180px;">Description</th>
+        <th style="width:350px;">Scope of Work (per RFQ)</th>
+        <th style="width:80px;">Start</th>
+        <th style="width:80px;">End / Target</th>
+        <th style="width:100px;">Progress</th>
+        <th style="width:90px;">Status</th>
+        <th style="width:200px;">Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2.1.1</td>
+        <td><span class="cat-tag">Project</span></td>
+        <td>Project Overview</td>
+        <td style="font-size:10px;line-height:1.4;">A comprehensive overview of the project will be provided, including objectives (e.g., product specifications) and the initial situation. The relevant factory stations, project data, scope of engineering, typical structures (e.g., pedestals), and individual work steps (planning services) will be outlined.</td>
+        <td>25/02/25</td>
+        <td>25/02/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.1.2</td>
+        <td><span class="cat-tag">Project</span></td>
+        <td>Project Schedule</td>
+        <td style="font-size:10px;line-height:1.4;">A rough time schedule for the project's execution will be provided by the Seller, covering the period from basic engineering through to plant commissioning.</td>
+        <td>3/01/25</td>
+        <td>3/01/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.1</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Review of Mass Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The mass balance will detail the main process mass flow rates. Relevant process parameters for each station or process step will be shown, with modifications highlighted.</td>
+        <td>4/01/25</td>
+        <td>20/01/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.2</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Review of Heat Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The heat balance will illustrate the design of the evaporator station, including steam consumers (heaters and pans) and condensers, showing mass flow rates for steam, condensate, and product in a block diagram. Temperature and pressure values for steam consumers, such as heat exchangers and vacuum pans across all sugar production stations, will be provided. Secondary stations, such as the boiler house, turbine, and cooling tower, will be included with rough calculations, and modifications will be highlighted.</td>
+        <td>4/01/25</td>
+        <td>20/01/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.3</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Review of Process Water Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The process water balance, as part of the heat balance, will show the main process water consumers, including mass flow rates and temperatures.</td>
+        <td>4/01/25</td>
+        <td>20/01/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.4</td>
+        <td><span class="cat-tag">Process Engineering</span></td>
+        <td>Terminal Points</td>
+        <td style="font-size:10px;line-height:1.4;">Terminal points define the incoming and outgoing material flows for the stations included in the scope of basic engineering. These points will be documented in lists detailing relevant data such as mass flow rates, composition, pressure, temperature, and aggregate phase, all prepared for normal operation. Terminal points will be displayed in the flow diagram and identified by unique numbers, with any modifications clearly highlighted.</td>
+        <td>25/02/26</td>
+        <td>26/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.5</td>
+        <td><span class="cat-tag">P&ID</span></td>
+        <td>Preparation of Process Flow Diagram</td>
+        <td style="font-size:10px;line-height:1.4;">The PFDs will depict all equipment items of the relevant stations according to EN ISO 10628, using graphical symbols for products, steam, water, and auxiliaries. Modifications will be highlighted. The PFDs will include symbolic representation of the required equipment, designation and identification numbers for apparatus and machinery, path and direction of input and output material flows, designation of media in main pipelines, representation of planning limits, standby installations for apparatus and machinery, tasks for measuring and open-loop/closed-loop control at critical process points (main control circuits), and representation of the individual scopes of supply for the customer and EPI Industrial LLC.</td>
+        <td>20/01/25</td>
+        <td>16/04/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.2.6</td>
+        <td><span class="cat-tag">P&ID</span></td>
+        <td>Process Description</td>
+        <td style="font-size:10px;line-height:1.4;">A brief description of the process based on the PFDs, with any modifications clearly highlighted.</td>
+        <td>25/02/26</td>
+        <td>26/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.3.1</td>
+        <td><span class="cat-tag">Equipment Specification</span></td>
+        <td>Equipment List</td>
+        <td style="font-size:10px;line-height:1.4;">An overview list of equipment will be created for all stations based on the flow diagram. This list will include equipment designation, item number, estimated loads, and remarks.</td>
+        <td>20/01/25</td>
+        <td>11/09/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>2.3.3</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>GA Drawings of Tanks, Vessels, Etc.</td>
+        <td style="font-size:10px;line-height:1.4;">Sketches will be prepared for all tanks and vessels, providing estimated information on main dimensions, nozzle positions, and nozzle sizes. These sketches are intended as a basis for inquiries to manufacturers and are not intended as manufacturing drawings.</td>
+        <td>28/11/25</td>
+        <td>TBD</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:50.0%;background:#f39c12;display:block;"></span></span>50%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">We will review fabricator drawings and provide comments</td>
+      </tr>
+      <tr>
+        <td>2.5.1</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>General Arrangement Plan View</td>
+        <td style="font-size:10px;line-height:1.4;">The general arrangement plan will be a to-scale ground plan sketch, representing the plant in its entirety, including the main process building, peripheral stations, traffic areas, water and green spaces, and supply and disposal systems.</td>
+        <td>2/02/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION B: DETAILED ENGINEERING -->
+<div class="section">
+  <div class="section-title">
+    B — Detailed Engineering Activities
+    <span class="pct-badge">Avg. Progress: 42%</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:60px;">Item</th>
+        <th style="width:100px;">Category</th>
+        <th style="width:180px;">Description</th>
+        <th style="width:350px;">Scope of Work (per RFQ)</th>
+        <th style="width:80px;">Start</th>
+        <th style="width:80px;">End / Target</th>
+        <th style="width:100px;">Progress</th>
+        <th style="width:90px;">Status</th>
+        <th style="width:200px;">Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3.1.1</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Updated Mass Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The mass balance will reflect the main process mass flow rates. Depending on the station, it will include data on temperatures, dry substance contents, purities, colors, and ash contents, which may vary.</td>
+        <td>20/01/25</td>
+        <td>26/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.1.2</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Updated Heat Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The heat balance will detail the design of the evaporator station, including steam consumers (heaters and pans) and condensers, presented in a block diagram with mass flow rates for steam, condensate, and product. Temperature and pressure values for individual steam consumers, such as heat exchangers and vacuum pans in all sugar production stations, will be indicated. Secondary stations like the boiler house, turbine, or cooling tower will also be included with rough calculations.</td>
+        <td>20/01/25</td>
+        <td>26/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.1.3</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>Updated Process Water Balance</td>
+        <td style="font-size:10px;line-height:1.4;">The process water balance, as part of the heat balance, will illustrate the main water consumers, including mass flow rates and temperatures.</td>
+        <td>20/01/25</td>
+        <td>26/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:100.0%;background:#27ae60;display:block;"></span></span>100%</td>
+        <td><span class="status complete">Complete</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.1.5</td>
+        <td><span class="cat-tag">P&ID</span></td>
+        <td>Piping and Instrumentation Diagram (P&ID)</td>
+        <td style="font-size:10px;line-height:1.4;">The PID, in accordance with EN ISO 10628, will visually represent the technical realization of the process using graphical symbols for plant components, pipelines, and measuring, open-loop, and closed-loop control functions. It will include all machinery and apparatus (including item numbers) directly involved in the process including standby units, all pipelines and conveyance paths detailing nominal sizes, materials, pipeline numbers, heating, cooling, and special design features, all valves and fittings with their nominal sizes and class, data on pipeline thermal insulation, flow direction for all media, identification of media at inlet/outlet points, specifications for electrical, measuring, open-loop, and closed-loop control (EMC) instruments including symbols, identifying letters, and TAG numbers, planning limits, and pipeline numbers and valve/fitting codes according to the Seller's standards.</td>
+        <td>4/01/25</td>
+        <td>12/12/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:98.0%;background:#f39c12;display:block;"></span></span>98%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.1.6</td>
+        <td><span class="cat-tag">P&ID</span></td>
+        <td>Detailed Process Description</td>
+        <td style="font-size:10px;line-height:1.4;">The detailed process description will provide information on the function, sequence, and control of individual process steps, covering process overview, control concept, operation procedures (commissioning, normal operation, shutdown), required trend groups, and required cleaning procedures. For the sugarhouse, the description will also include the pan boiling system.</td>
+        <td>25/02/26</td>
+        <td>25/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.1.7</td>
+        <td><span class="cat-tag">M&E</span></td>
+        <td>List of Auxiliary Materials (Chemical)</td>
+        <td style="font-size:10px;line-height:1.4;">The list of auxiliary materials will detail the total quantity and consumption of substances required for operating the processes and stations within the scope of engineering. The data, based on experience, may vary depending on the quality of the raw sugar. The list will include materials such as antifoam oil, disinfectants, gypsum, sulfuric acid, anti-deposit agents, flocculants, filter aids, caustic soda, sodium carbonate, isopropyl alcohol, cleaning agents, and hydrochloric acid. This list will exclude operating materials/consumables such as fossil energy sources (natural gas, petrol, diesel fuel), compressed air, cooling water, seal water for pumps, greases, and oils.</td>
+        <td>25/02/26</td>
+        <td>5/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.2.1</td>
+        <td><span class="cat-tag">Equipment Specification</span></td>
+        <td>Updated Equipment List</td>
+        <td style="font-size:10px;line-height:1.4;">An overview list of equipment will be created for all stations based on the flow diagram. This list will include equipment designation, item number, substance data, remarks, scope of supply (Purchaser, Seller, or outside the contract), and process-technological design data.</td>
+        <td>11/09/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:97.0%;background:#f39c12;display:block;"></span></span>97%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.2.3</td>
+        <td><span class="cat-tag">Equipment Specification</span></td>
+        <td>List of Consumables  (Lubricants Grease,Packing materials, Gaskets,Seals,Cleaning chemicals, Bolts, nuts, and washers, Consumables)</td>
+        <td style="font-size:10px;line-height:1.4;">The list of consumables will detail the total quantity and consumption of substances required for the operation of machinery included in the scope of Detailed Engineering. This data is based on the manufacturer's technical documentation. The list will include, for example, fossil energy sources (e.g., natural gas, petrol, diesel fuel), compressed air for supply, cooling water and seal water for pumps, and greases and oils.</td>
+        <td>25/02/26</td>
+        <td></td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.3.0</td>
+        <td><span class="cat-tag">Instrumentation</span></td>
+        <td>Basic Engineering for Measuring and Control Equipment</td>
+        <td style="font-size:10px;line-height:1.4;">Basic engineering for measuring and control equipment will be provided.</td>
+        <td>31/10/25</td>
+        <td>27/11/25</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">This is a general category covered in instrumentation subitems (3.3.1 to 3.3.3)</td>
+      </tr>
+      <tr>
+        <td>3.3.1</td>
+        <td><span class="cat-tag">Instrumentation</span></td>
+        <td>List of Measuring and Control Points</td>
+        <td style="font-size:10px;line-height:1.4;">This list provides an overview of all automation points, including TAG number, description of measuring function, measuring medium, main process parameters (e.g., temperature, pressure, flow rate), field device designation, and selected main parameters for the field device.</td>
+        <td>31/10/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">All these items are included in Instrument List</td>
+      </tr>
+      <tr>
+        <td>3.3.2</td>
+        <td><span class="cat-tag">Instrumentation</span></td>
+        <td>Specifications of Measuring Sensors and Control Fittings</td>
+        <td style="font-size:10px;line-height:1.4;">The specifications will include all necessary data for equipment procurement, covering equipment designation, technical details (e.g., process connection, material, measuring range, measuring signal, voltage supply, accessories, specific requirements), and details of the process medium.</td>
+        <td>31/10/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">All these items are included in Instrument List</td>
+      </tr>
+      <tr>
+        <td>3.3.3</td>
+        <td><span class="cat-tag">Instrumentation</span></td>
+        <td>List of Inputs and Outputs for the Process Control System</td>
+        <td style="font-size:10px;line-height:1.4;">This list will detail the number of inputs and outputs required for the process control system, based on the electric consumers, measuring sensors, and control fittings. The list will include analog inputs, analog outputs, digital inputs, and digital outputs.</td>
+        <td>31/10/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">All these items are included in Instrument List</td>
+      </tr>
+      <tr>
+        <td>3.3.4</td>
+        <td><span class="cat-tag">Electrical</span></td>
+        <td>Cable Tray Planning</td>
+        <td style="font-size:10px;line-height:1.4;">The planning of cable trays includes visualization in the 3D model. The following material lists, including specifications, will be provided: bill of materials for cable trays and assembly parts, and bill of materials for cables.</td>
+        <td>25/02/26</td>
+        <td>15/05/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.4.0</td>
+        <td><span class="cat-tag">Electrical</span></td>
+        <td>Basic Engineering for Electric Switchgear</td>
+        <td style="font-size:10px;line-height:1.4;">Basic engineering for electric switchgear will be provided.</td>
+        <td>24/06/25</td>
+        <td>10/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:90.0%;background:#f39c12;display:block;"></span></span>90%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">This is a General Category that is covered in Subitem 3.4.1 All these items are included in Load List</td>
+      </tr>
+      <tr>
+        <td>3.4.1</td>
+        <td><span class="cat-tag">Electrical</span></td>
+        <td>Motor List with MCC, PCC, VFD, and System Design</td>
+        <td style="font-size:10px;line-height:1.4;">The motor list will include all electric consumers specified in the technical documentation. It will contain the following information: item number, drive type, power (kW) (preliminary), voltage (Volt), frequency (Hz), starting method, and protection class.</td>
+        <td>24/06/25</td>
+        <td>10/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:90.0%;background:#f39c12;display:block;"></span></span>90%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">All these items are included in Load List</td>
+      </tr>
+      <tr>
+        <td>3.5.0</td>
+        <td><span class="cat-tag">Control</span></td>
+        <td>DCS and Automation Software Specifications</td>
+        <td style="font-size:10px;line-height:1.4;">The specification will include details on operating system structure, bus system structure, server structure, automation system structure, network structure for MCC boards and local boards, and equipment structure for the MCC.</td>
+        <td>25/02/26</td>
+        <td>6/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">Per our understanding the vendor will include this. We can review</td>
+      </tr>
+      <tr>
+        <td>3.6.0</td>
+        <td><span class="cat-tag">Electrical/Control</span></td>
+        <td>Hardware Engineering</td>
+        <td style="font-size:10px;line-height:1.4;">Hardware engineering will be conducted using CAD system software and will include circuit diagrams, terminal diagrams, parts lists, plant layout, cable lists, and connected loads/rating. The emergency power supply for the automation system and electrical consumers will also be implemented.</td>
+        <td>25/02/26</td>
+        <td>8/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">Per our understanding the vendor will include this. We can review</td>
+      </tr>
+      <tr>
+        <td>3.7.0</td>
+        <td><span class="cat-tag">Control</span></td>
+        <td>Software Programming ( Refrence Graphics Screen and technical doccuments  will provide to Vendor)</td>
+        <td style="font-size:10px;line-height:1.4;">Software programming will be based on the detailed process descriptions of the plant components to be controlled. Hardware and system software will be integrated, with the application software built on the system software. This will include the configuration and parameterization of process data processing, operation, and monitoring at both the open-loop/closed-loop control level and the process control level. Key aspects include programming of the graphical user interface, PCS7 software for the operator station, and PCS7 software for the automation system.</td>
+        <td>25/02/26</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">Per our understanding the vendor will include this. We can review</td>
+      </tr>
+      <tr>
+        <td>3.8.1</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>3D CAD Model</td>
+        <td style="font-size:10px;line-height:1.4;">The 3D visualization of the plant design will focus on the main process building and will include precise modeling and positioning of factory equipment. It will cover foundations, pipelines including all valves and fittings, air ducts and chutes, and stairs, lifts, ladders, pedestals, and the building envelope (represented in a simplified form).</td>
+        <td>17/11/25</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">Repeated in our proposal. Eliminated Repeated Item</td>
+      </tr>
+      <tr>
+        <td>3.8.2</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>Detailed Plant Layout Drawing</td>
+        <td style="font-size:10px;line-height:1.4;">A detailed plant layout drawing will be created to plan the space requirements for plant equipment. This drawing will show equipment items in true-to-scale ground plans and side views, including alignment with the main axes. The layout will determine the site and space requirements for the plant, with clear detailing and item numbers where needed. The drawing will include main dimensions and positions of machines and apparatus, basic structures (e.g., walls, steel structures, as basic representations), operating platforms, ladders, stairs, lifts, doors, windows (as basic representations), and type of platform covering (e.g., gratings, chequer plates, as basic representations).</td>
+        <td>2/02/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:90.0%;background:#f39c12;display:block;"></span></span>90%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">Repeated in our proposal. Eliminated Repeated Item</td>
+      </tr>
+      <tr>
+        <td>3.8.3</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>Detailed Load Plan Details for Foundation and Steel Structure</td>
+        <td style="font-size:10px;line-height:1.4;">Load plans will serve as the basis for static calculations and the design of steel and concrete structures by third parties. For the equipment items shown in the detailed plant layout drawing, the plans will indicate weight forces from empty, operating, and catastrophe weights (in kN), machine, apparatus, and foundation drawing numbers, and dimensions of load points (in relation to the equipment axes).</td>
+        <td>25/02/26</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.8.4</td>
+        <td><span class="cat-tag">Layout</span></td>
+        <td>Platform Opening Plans for Equipment and Pipelines</td>
+        <td style="font-size:10px;line-height:1.4;">Plans for platform openings for pipelines ≥ 2½" and equipment will be prepared as top views with precise dimensions.</td>
+        <td>17/11/25</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:10.0%;background:#e67e22;display:block;"></span></span>10%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">This will be developed as the 3D Drawing is developed along with the pipeline</td>
+      </tr>
+      <tr>
+        <td>3.8.5</td>
+        <td><span class="cat-tag">Civil</span></td>
+        <td>Foundation Plans</td>
+        <td style="font-size:10px;line-height:1.4;">Detailed foundation plans will be developed based on the plant design. These plans will be to scale with dimensions, aligned with the main axes in ground and side views. Where necessary, additional details will be clearly depicted. Item numbers for related equipment will be indicated to facilitate static calculations for the pedestals.</td>
+        <td></td>
+        <td></td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">Final Information from customer will required</td>
+      </tr>
+      <tr>
+        <td>3.9.11</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Terminal Points for Pipe Specifications with BOM</td>
+        <td style="font-size:10px;line-height:1.4;">The terminal points define the ingoing and outgoing positions and properties of pipelines at the stations included in the detailed engineering scope. These interfaces will be documented in lists containing relevant data, prepared for normal operation. Each terminal point will be shown in the flow diagram, identified by unique numbers, and accompanied by a drawing with dimensions relative to the main beam structure.</td>
+        <td>1/02/26</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">This is part of the isometric development</td>
+      </tr>
+      <tr>
+        <td>3.9.2</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Piping Specifications</td>
+        <td style="font-size:10px;line-height:1.4;">A description of each pipeline class will be provided, including all key technical data such as standards, pressure, temperature, material, and nominal sizes. Specifications will be presented in the form of data sheets.</td>
+        <td>1/02/26</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">This is part of the isometric development</td>
+      </tr>
+      <tr>
+        <td>3.9.3</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>List of Valves and Fittings</td>
+        <td style="font-size:10px;line-height:1.4;">A bill of materials for all valves and fittings will be prepared based on the PID, either per section or for the entire project. Items will be classified by type, including pressure, temperature, material, and nominal size. Alternatively, valves and fittings can be identified by a unique number.</td>
+        <td>1/11/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:50.0%;background:#f39c12;display:block;"></span></span>50%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.9.4</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Valves and Fittings Specifications</td>
+        <td style="font-size:10px;line-height:1.4;">Each valve and fitting class will be described, including key technical data such as standards, pressure, temperature, material, sealing material, nominal sizes, weight, etc. Specifications will be presented in data sheet format.</td>
+        <td>1/11/25</td>
+        <td>15/03/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.9.5</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Isometric for pipelines</td>
+        <td style="font-size:10px;line-height:1.4;">Isometric drawings will be created for all pipelines ≥ 2½", including unit lists for these pipelines based on ANSI standards.</td>
+        <td>1/02/26</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:5.0%;background:#e67e22;display:block;"></span></span>5%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">Repeated in our proposal. Eliminated Repeated Item</td>
+      </tr>
+      <tr>
+        <td>3.9.6</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Pipeline support with design</td>
+        <td style="font-size:10px;line-height:1.4;">Specifications will be provided for support structures (typical) and any special structures needed for pipe supports.</td>
+        <td>1/02/26</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.9.7</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Bill of materials for pipelines, fittings, and supports</td>
+        <td style="font-size:10px;line-height:1.4;">A bill of materials will be prepared as an order template for all pipelines, fittings, and supports ≥ 2½" based on ANSI standards.</td>
+        <td>1/02/26</td>
+        <td>30/04/26</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:80.0%;background:#f39c12;display:block;"></span></span>80%</td>
+        <td><span class="status progress">In Progress</span></td>
+        <td class="remark">—</td>
+      </tr>
+      <tr>
+        <td>3.9.9</td>
+        <td><span class="cat-tag">Piping</span></td>
+        <td>Bill of materials for bolts, nuts, and washers</td>
+        <td style="font-size:10px;line-height:1.4;">A bill of materials will be prepared as an order template for all bolts, nuts, and washers required for pipelines, fittings, and supports ≥ 2½", based on ANSI standards.</td>
+        <td>TBD</td>
+        <td>TBD</td>
+        <td><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0.0%;background:#e74c3c;display:block;"></span></span>0%</td>
+        <td><span class="status not-started">Not Started</span></td>
+        <td class="remark">—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  Schaffer Sugar Services · Confidential · Report generated April 07, 2026
+</div>
+
+</body>
+</html>
